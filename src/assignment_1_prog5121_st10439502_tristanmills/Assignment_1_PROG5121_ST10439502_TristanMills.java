@@ -185,12 +185,20 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
     }
 
     private static boolean validatePassword(String password) {
-        if (password.length() < 8) return false;
+        if (password.length() < 8) {
+            return false;
+        }
         boolean hasCapital = false, hasNumber = false, hasSpecial = false;
         for (char c : password.toCharArray()) {
-            if (Character.isUpperCase(c)) hasCapital = true;
-            if (Character.isDigit(c)) hasNumber = true;
-            if (!Character.isLetterOrDigit(c)) hasSpecial = true;
+            if (Character.isUpperCase(c)) {
+                hasCapital = true;
+            }
+            if (Character.isDigit(c)) {
+                hasNumber = true;
+            }
+            if (!Character.isLetterOrDigit(c)) {
+                hasSpecial = true;
+            }
         }
         return hasCapital && hasNumber && hasSpecial;
     }
