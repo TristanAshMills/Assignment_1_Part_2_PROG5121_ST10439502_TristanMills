@@ -9,6 +9,7 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
     private static String storedPassword;
     private static String storedFirstName;
     private static String storedLastName;
+    private static String storedPhoneNumber;
     private static boolean isLoggedIn = false;
     private static int messageCounter = 0;
 
@@ -56,6 +57,9 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
 
         System.out.print("Enter last name: ");
         storedLastName = scanner.nextLine();
+        
+        System.out.print("Enter phone number (South African format e.g. 0821234567): ");
+        storedPhoneNumber = scanner.nextLine();
 
         System.out.println("\nUSERNAME REQUIREMENTS:\n- Must contain an underscore (_)\n- Must be 5 characters or less");
         System.out.print("Enter username: ");
@@ -202,4 +206,7 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
         }
         return hasCapital && hasNumber && hasSpecial;
     }
+        private static boolean validateSouthAfricanPhoneNumber(String phoneNumber) {
+        return Pattern.matches("^0[26789]\\d{8}$", phoneNumber);
+        }
 }
