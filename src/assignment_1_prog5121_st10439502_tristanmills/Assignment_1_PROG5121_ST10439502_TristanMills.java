@@ -1,32 +1,38 @@
 package assignment_1_prog5121_st10439502_tristanmills;
 
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Pattern;
 
-/**
- *
- * @author Tristan
- */
 public class Assignment_1_PROG5121_ST10439502_TristanMills {
 
     private static String storedUsername;
     private static String storedPassword;
     private static String storedFirstName;
     private static String storedLastName;
-    private static String storedPhoneNumber;
+    private static boolean isLoggedIn = false;
+    private static int messageCounter = 0;
+
+    private static List<String> storedMessages = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        
+
         while (true) {
             System.out.println("\n=== MAIN MENU ===");
             System.out.println("1. Create Account");
             System.out.println("2. Login");
             System.out.println("3. Exit");
             System.out.print("Select option: ");
+
+            if (!scanner.hasNextInt()) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.nextLine();
+                continue;
+            }
+
             int option = scanner.nextInt();
-            scanner.nextLine(); 
-            
+            scanner.nextLine();
+
             switch (option) {
                 case 1:
                     createAccount(scanner);
@@ -36,123 +42,156 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
                     break;
                 case 3:
                     System.out.println("Goodbye!");
-                    scanner.close();
                     return;
                 default:
                     System.out.println("Invalid option, please try again.");
             }
         }
     }
-    
+
     private static void createAccount(Scanner scanner) {
         System.out.println("\n=== ACCOUNT CREATION ===");
-        
-        // Get user details \\
         System.out.print("Enter first name: ");
         storedFirstName = scanner.nextLine();
-        
+
         System.out.print("Enter last name: ");
         storedLastName = scanner.nextLine();
-        
-        // Username with instructions \\
-        System.out.println("\nUSERNAME REQUIREMENTS:");
-        System.out.println("- Must contain an underscore (_)");
-        System.out.println("- Must be 5 characters or less");
+
+        System.out.println("\nUSERNAME REQUIREMENTS:\n- Must contain an underscore (_)\n- Must be 5 characters or less");
         System.out.print("Enter username: ");
         storedUsername = scanner.nextLine();
-        
+
         if (!validateUsername(storedUsername)) {
-            System.out.println("\nERROR: Username must:");
-            System.out.println("- Contain an underscore (_)");
-            System.out.println("- Be 5 characters or less");
-            System.out.println("Example: 'john_' or 'a_b'");
+            System.out.println("Invalid username, please follow the requirements.");
             return;
         }
-        System.out.println("✓ Username valid");
-        
-        // Password with instructions \\
-        System.out.println("\nPASSWORD REQUIREMENTS:");
-        System.out.println("- At least 8 characters");
-        System.out.println("- At least 1 capital letter");
-        System.out.println("- At least 1 number");
-        System.out.println("- At least 1 special character (!@#$%^&*)");
+
+        System.out.println("\nPASSWORD REQUIREMENTS:\n- At least 8 characters\n- At least 1 capital letter\n- At least 1 number\n- At least 1 special character (!@#$%^&*)");
         System.out.print("Enter password: ");
         storedPassword = scanner.nextLine();
-        
+
         if (!validatePassword(storedPassword)) {
-            System.out.println("\nERROR: Password must contain:");
-            System.out.println("- At least 8 characters");
-            System.out.println("- At least 1 capital letter");
-            System.out.println("- At least 1 number");
-            System.out.println("- At least 1 special character (!@#$%^&*)");
-            System.out.println("Example: 'Password123!'");
+            System.out.println("Invalid password, please follow the requirements.");
             return;
         }
-        System.out.println("✓ Password valid");
-        
-        // Phone number with instructions \\
-        System.out.println("\nPHONE NUMBER REQUIREMENTS:");
-        System.out.println("- South African cell number format");
-        System.out.println("- Starts with 0, followed by 7, 8, or 9");
-        System.out.println("- 10 digits total (e.g., 0712345678)");
-        System.out.print("Enter phone number: ");
-        storedPhoneNumber = scanner.nextLine();
-        
-        if (!validateSouthAfricanPhoneNumber(storedPhoneNumber)) {
-            System.out.println("\nERROR: Phone number must be:");
-            System.out.println("- A valid South African cell number");
-            System.out.println("- Format: 07xxxxxxxx or 08xxxxxxxx or 09xxxxxxxx");
-            System.out.println("- Example: '0821234567'");
-            return;
-        }
-        System.out.println("✓ Phone number valid");
-        
-        System.out.println("\nAccount created successfully!");
+
+        System.out.println("Account created successfully!");
     }
-    
+
     private static void login(Scanner scanner) {
         if (storedUsername == null || storedPassword == null) {
-            System.out.println("\nNo accounts exist. Please create an account first.");
+            System.out.println("\nNo account exists. Please create an account first.");
             return;
         }
-        
+
         System.out.println("\n=== LOGIN ===");
         System.out.print("Username: ");
         String username = scanner.nextLine();
-        
         System.out.print("Password: ");
         String password = scanner.nextLine();
-        
+
         if (username.equals(storedUsername) && password.equals(storedPassword)) {
-            System.out.printf("\nWelcome %s %s! It's great to see you again.\n", 
-                           storedFirstName, storedLastName);
+            isLoggedIn = true;
+            System.out.printf("\nWelcome %s %s!\n", storedFirstName, storedLastName);
+            quickChatMenu(scanner);
         } else {
-            System.out.println("\nLogin failed. Incorrect username or password.");
-            System.out.println("Please try again or contact support if you forgot your credentials.");
+            System.out.println("Login failed. Incorrect username or password.");
         }
     }
-    
+
+    private static void quickChatMenu(Scanner scanner) {
+        System.out.println("\nWelcome to QuickChat.");
+
+        while (true) {
+            System.out.println("\n1. Send Messages");
+            System.out.println("2. Show Recently Sent Messages");
+            System.out.println("3. Quit");
+            System.out.print("Select option: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    sendMessages(scanner);
+                    break;
+                case 2:
+                    System.out.println("Coming Soon.");
+                    break;
+                case 3:
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+    private static void sendMessages(Scanner scanner) {
+        System.out.print("How many messages would you like to send? ");
+        int numMessages = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int i = 0; i < numMessages; i++) {
+            System.out.print("Enter recipient number (+CountryCode and max 10 digits): ");
+            String recipient = scanner.nextLine();
+            if (!recipient.matches("^\\+\\d{1,3}\\d{0,10}$")) {
+                System.out.println("Invalid recipient number format.");
+                i--;
+                continue;
+            }
+
+            System.out.print("Enter message (max 250 characters): ");
+            String messageText = scanner.nextLine();
+
+            if (messageText.length() > 250) {
+                System.out.println("Please enter a message of less than 250 characters.");
+                i--;
+                continue;
+            }
+
+            messageCounter++;
+            long messageId = 1000000000L + new Random().nextInt(900000000);
+            String[] words = messageText.split(" ");
+            String firstWord = words.length > 0 ? words[0] : "";
+            String lastWord = words.length > 1 ? words[words.length - 1] : firstWord;
+            String messageHash = String.format("%02d:%d:%s%s", messageId % 100, messageCounter, firstWord.toUpperCase(), lastWord.toUpperCase());
+
+            System.out.println("Choose an option:\n1. Send Message\n2. Disregard Message\n3. Store Message to send later");
+            int option = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (option) {
+                case 1:
+                    System.out.println("Message sent.");
+                    System.out.println("Message ID: " + messageId);
+                    System.out.println("Message Hash: " + messageHash);
+                    break;
+                case 2:
+                    System.out.println("Message disregarded.");
+                    messageCounter--;
+                    break;
+                case 3:
+                    storedMessages.add(messageText);
+                    System.out.println("Message stored for later.");
+                    break;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
     private static boolean validateUsername(String username) {
         return username.length() <= 5 && username.contains("_");
     }
-    
+
     private static boolean validatePassword(String password) {
         if (password.length() < 8) return false;
-        
-        boolean hasCapital = false;
-        boolean hasNumber = false;
-        boolean hasSpecial = false;
-        
+        boolean hasCapital = false, hasNumber = false, hasSpecial = false;
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) hasCapital = true;
             if (Character.isDigit(c)) hasNumber = true;
             if (!Character.isLetterOrDigit(c)) hasSpecial = true;
         }
-        
         return hasCapital && hasNumber && hasSpecial;
-    }
-    
-    private static boolean validateSouthAfricanPhoneNumber(String phoneNumber) {
-        return Pattern.matches("^0[26789]\\d{8}$", phoneNumber);
     }
 }
