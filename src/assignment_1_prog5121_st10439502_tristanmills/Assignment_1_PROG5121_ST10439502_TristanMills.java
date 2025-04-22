@@ -126,7 +126,7 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
     private static void quickChatMenu(Scanner scanner) {
         System.out.println("\nWelcome to QuickChat.");
 
-        // Chat menu loop \\
+        /* Chat menu loop \\
         while (true) {
             System.out.println("\n1. Send Messages");
             System.out.println("2. Show Recently Sent Messages");
@@ -145,70 +145,10 @@ public class Assignment_1_PROG5121_ST10439502_TristanMills {
                 }
                 default -> System.out.println("Invalid option.");
             }
-        }
+        }*/
     }
 
-    // Method to handle sending messages \\
-    private static void sendMessages(Scanner scanner) {
-        // Ask how many messages to send \\
-        System.out.print("How many messages would you like to send? ");
-        int numMessages = scanner.nextInt();
-        scanner.nextLine();
 
-        // Loop for each message \\
-        for (int i = 0; i < numMessages; i++) {
-            // Prompt for recipient number with validation \\
-            System.out.print("Enter recipient number (+CountryCode and max 10 digits): ");
-            String recipient = scanner.nextLine();
-            if (!recipient.matches("^\\+\\d{1,3}\\d{0,10}$")) {
-                System.out.println("Invalid recipient number format.");
-                i--;
-                continue;
-            }
-
-            // Prompt for message text with length check \\
-            System.out.print("Enter message (max 250 characters): ");
-            String messageText = scanner.nextLine();
-
-            if (messageText.length() > 250) {
-                System.out.println("Please enter a message of less than 250 characters.");
-                i--;
-                continue;
-            }
-
-            messageCounter++; // Increment message count \\
-
-            // Generate message ID and hash \\
-            long messageId = 1000000000L + new Random().nextInt(900000000);
-            String[] words = messageText.split(" ");
-            String firstWord = words.length > 0 ? words[0] : "";
-            String lastWord = words.length > 1 ? words[words.length - 1] : firstWord;
-            String messageHash = String.format("%02d:%d:%s%s", messageId % 100, messageCounter, firstWord.toUpperCase(), lastWord.toUpperCase());
-
-            // Provide user options for the message \\
-            System.out.println("Choose an option:\n1. Send Message\n2. Disregard Message\n3. Store Message to send later");
-            int option = scanner.nextInt();
-            scanner.nextLine();
-
-            // Handle message option \\
-            switch (option) {
-                case 1 -> {
-                    System.out.println("Message sent.");
-                    System.out.println("Message ID: " + messageId);
-                    System.out.println("Message Hash: " + messageHash);
-                }
-                case 2 -> {
-                    System.out.println("Message disregarded.");
-                    messageCounter--; // Decrement counter if disregarded \\
-                }
-                case 3 -> {
-                    storedMessages.add(messageText); // Store message for later \\
-                    System.out.println("Message stored for later.");
-                }
-                default -> System.out.println("Invalid option.");
-            }
-        }
-    }
 
     // Method to validate username format \\
     private static boolean validateUsername(String username) {
